@@ -66,6 +66,15 @@ public:
       lv_obj_align(lv, LV_ALIGN_TOP_RIGHT, -5, 0);
     }
 
+    lv_obj_t *label_nav_src = lv_label_create(status_box);
+    {
+      auto lv = label_nav_src;
+      lv_label_set_text(lv, "GPS");
+      lv_obj_set_style_text_color(lv, color_green, 0);
+      lv_obj_set_style_text_font(lv, &font_20, 0);
+      lv_obj_align(lv, LV_ALIGN_TOP_LEFT, 0, 0);
+    }
+
     // Голубая рамка (имитация drawRect)
     lv_obj_t *box_com = lv_obj_create(parent);
     lv_obj_remove_style_all(box_com);

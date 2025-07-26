@@ -4,10 +4,13 @@
 #include "colors.h"
 #include "global.h"
 
+#include "imgs/plane.c"
+
 class NavStatusPage
 {
 private:
   lv_obj_t *container;
+  lv_obj_t *img_plane;
 
 public:
   NavStatusPage(lv_obj_t *parent)
@@ -32,7 +35,7 @@ public:
     {
       // Преобразуем географические координаты в пиксельные
       float x = scale / 2.0 + (p.lonx - clonx) / range * scale;
-      float y = scale / 2.0 + (p.laty - claty) / range * scale;
+      float y = scale / 2.0 + (claty - p.laty) / range * scale;
 
       lv_obj_t *label_wp = lv_label_create(container);
       {
@@ -71,11 +74,33 @@ public:
     lv_obj_set_style_line_width(line, 2, 0);
     lv_obj_set_style_line_color(line, lv_color_hex(0x00FF00), 0);
     lv_obj_align(line, LV_ALIGN_CENTER, 0, 0);
+
+    LV_IMG_DECLARE(plane);
+
+    // Используйте его в объекте изображения
+    img_plane = lv_img_create(container);
+    {
+      auto lv = img_plane;
+      lv_img_set_src(lv, &plane);
+      lv_obj_set_style_image_recolor(lv, color_white, 0);
+      lv_obj_set_style_image_recolor_opa(lv, LV_OPA_COVER, 0);
+      lv_image_set_pivot(lv, 8, 8);
+      lv_obj_align(lv, LV_ALIGN_CENTER, 0, 0);
+
+      lv_anim_t a;
+      lv_anim_init(&a);
+      lv_anim_set_var(&a, lv);
+      lv_anim_set_exec_cb(&a, [](void *img, int32_t v)
+                          { lv_image_set_rotation((lv_obj_t *)img, v); });
+      lv_anim_set_values(&a, 0, 3600);
+      lv_anim_set_duration(&a, 5000);
+      lv_anim_set_repeat_count(&a, LV_ANIM_REPEAT_INFINITE);
+      lv_anim_start(&a);
+    }
   }
 
   ~NavStatusPage()
   {
     lv_obj_del(container);
-    container = nullptr;
   }
 };
