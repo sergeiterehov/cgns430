@@ -3,7 +3,7 @@
 
 #include "colors.h"
 #include "global.h"
-#include "pages/NavStatusPage.cpp"
+#include "pages/NavMapPage.cpp"
 
 class Screen
 {
@@ -13,7 +13,7 @@ private:
   lv_obj_t *label_com_stb_frq;
   lv_obj_t *box_page;
 
-  NavStatusPage *page;
+  NavMapPage *page;
 
   void _handle_com_frq(float raw)
   {
@@ -38,22 +38,30 @@ public:
 
     // Черная нижняя панель
     lv_obj_t *bottom_bar = lv_obj_create(parent);
-    lv_obj_remove_style_all(bottom_bar);
-    lv_obj_set_size(bottom_bar, 320, 24);
-    lv_obj_align(bottom_bar, LV_ALIGN_BOTTOM_MID, 0, 0);
-    lv_obj_set_style_border_color(bottom_bar, color_cyan, 0);
-    lv_obj_set_style_border_width(bottom_bar, 1, 0);
-    lv_obj_set_style_border_side(bottom_bar, LV_BORDER_SIDE_TOP, 0);
+    {
+      auto lv = bottom_bar;
+      lv_obj_remove_style_all(lv);
+      lv_obj_set_size(lv, 320, 24);
+      lv_obj_align(lv, LV_ALIGN_BOTTOM_MID, 0, 0);
+      lv_obj_set_style_bg_color(lv, color_blue, 0);
+      lv_obj_set_style_bg_opa(lv, LV_OPA_COVER, 0);
+      lv_obj_set_style_border_color(lv, color_cyan, 0);
+      lv_obj_set_style_border_width(lv, 1, 0);
+      lv_obj_set_style_border_side(lv, LV_BORDER_SIDE_TOP, 0);
+    }
 
     lv_obj_t *status_box = lv_obj_create(bottom_bar);
-    lv_obj_remove_style_all(status_box);
-    lv_obj_set_size(status_box, 180, 24);
-    lv_obj_align(status_box, LV_ALIGN_TOP_LEFT, 0, 0);
-    lv_obj_set_style_bg_color(status_box, color_black, 0);
-    lv_obj_set_style_bg_opa(status_box, LV_OPA_COVER, 0);
-    lv_obj_set_style_border_color(status_box, color_cyan, 0);
-    lv_obj_set_style_border_width(status_box, 1, 0);
-    lv_obj_set_style_border_side(status_box, LV_BORDER_SIDE_RIGHT, 0);
+    {
+      auto lv = status_box;
+      lv_obj_remove_style_all(lv);
+      lv_obj_set_size(lv, 180, 24);
+      lv_obj_align(lv, LV_ALIGN_TOP_LEFT, 0, 0);
+      lv_obj_set_style_bg_color(lv, color_black, 0);
+      lv_obj_set_style_bg_opa(lv, LV_OPA_COVER, 0);
+      lv_obj_set_style_border_color(lv, color_cyan, 0);
+      lv_obj_set_style_border_width(lv, 1, 0);
+      lv_obj_set_style_border_side(lv, LV_BORDER_SIDE_RIGHT, 0);
+    }
 
     lv_obj_t *label_msg = lv_label_create(status_box);
     {
@@ -77,12 +85,16 @@ public:
 
     // Голубая рамка (имитация drawRect)
     lv_obj_t *box_com = lv_obj_create(parent);
-    lv_obj_remove_style_all(box_com);
-    lv_obj_set_size(box_com, 100, 72);
-    lv_obj_set_style_border_color(box_com, color_cyan, 0);
-    lv_obj_set_style_border_width(box_com, 1, 0);
-    lv_obj_set_style_bg_opa(box_com, LV_OPA_TRANSP, 0); // прозрачный фон
-    lv_obj_align(box_com, LV_ALIGN_TOP_LEFT, 0, 0);
+    {
+      auto lv = box_com;
+      lv_obj_remove_style_all(lv);
+      lv_obj_set_size(lv, 100, 72);
+      lv_obj_set_style_border_color(lv, color_cyan, 0);
+      lv_obj_set_style_border_width(lv, 1, 0);
+      lv_obj_set_style_bg_color(lv, color_blue, 0);
+      lv_obj_set_style_bg_opa(lv, LV_OPA_COVER, 0);
+      lv_obj_align(lv, LV_ALIGN_TOP_LEFT, 0, 0);
+    }
 
     // Метка "COM"
     lv_obj_t *label_com = lv_label_create(box_com);
@@ -115,7 +127,7 @@ public:
       lv_obj_align(lv, LV_ALIGN_TOP_LEFT, 100, 0);
     }
 
-    page = new NavStatusPage(box_page);
+    page = new NavMapPage(box_page);
 
     drefProvider.addListener(
         "sim/cockpit2/radios/actuators/com2_frequency_hz_833",

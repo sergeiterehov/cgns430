@@ -121,6 +121,9 @@
 /*Align the start address of draw_buf addresses to this bytes*/
 #define LV_DRAW_BUF_ALIGN                       4
 
+// #define LV_DRAW_TRANSFORM_USE_MATRIX 1
+// #define LV_USE_MATRIX 1
+
 #define LV_USE_DRAW_SW 1
 #if LV_USE_DRAW_SW == 1
     /* Set the number of draw unit.

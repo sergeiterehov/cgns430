@@ -11,6 +11,7 @@ size_t GLog::write(uint8_t ch)
   {
     if (tft->getCursorY() >= tft->height())
     {
+      tft->fillScreen(0);
       tft->setCursor(0, 0);
     }
   }

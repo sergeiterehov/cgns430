@@ -22,6 +22,8 @@
 #define WIFI_PASS ""
 #endif
 
+LV_IMG_DECLARE(plane);
+
 #define DRAW_BUF_SIZE (SCREEN_WIDTH * SCREEN_HEIGHT / 10 * (LV_COLOR_DEPTH / 8))
 uint16_t draw_buf[DRAW_BUF_SIZE / sizeof(uint16_t)];
 
@@ -31,6 +33,11 @@ void flush_display_cb(lv_display_t *display, const lv_area_t *area, uint8_t *px_
 {
   tft.drawRGBBitmap(area->x1, area->y1, (uint16_t *)px_map, area->x2 - area->x1 + 1, area->y2 - area->y1 + 1);
   lv_display_flush_ready(display);
+}
+
+static uint32_t tick_function(void)
+{
+  return millis();
 }
 
 Screen *screen;
@@ -128,6 +135,7 @@ void setup()
   glog.println("Starting graphics...");
 
   lv_init();
+  lv_tick_set_cb(tick_function);
 
   display = lv_display_create(SCREEN_WIDTH, SCREEN_HEIGHT);
 
@@ -136,23 +144,18 @@ void setup()
   lv_display_set_rotation(display, LV_DISPLAY_ROTATION_270);
 
   lv_obj_t *lv_screen = lv_screen_active();
-  lv_obj_set_style_bg_color(lv_screen, color_blue, 0);
+  lv_obj_set_style_bg_color(lv_screen, color_black, 0);
 
   screen = new Screen(lv_screen);
 
   glog.useSerial();
 }
 
-unsigned long frame_millis = 0;
-unsigned long last_frame_millis = 0;
-
 void loop(void)
 {
-  frame_millis = millis();
-
   drefProvider.loop();
 
-  lv_tick_inc(frame_millis - last_frame_millis);
-  last_frame_millis = frame_millis;
-  lv_task_handler();
+  lv_timer_handler();
+
+  delay(5);
 }
